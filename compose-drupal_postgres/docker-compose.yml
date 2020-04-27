@@ -3,11 +3,27 @@ version: '3'
 services:
   drupaldb:
     image: postgres:latest
+    volumes: 
+      - drupal-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: 123456
-  mycontent:
-    image: drupal
+      POSTGRES_DB: drupal
+  drupal:
+    image: custom-drupal
+    build: .
     ports:
-      - '8080:80'
-    depends_on: 
+      - '8081:80'
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-sites:/var/www/html/sites
+      - drupal-themes:/var/www/html/themes
+    depends_on:
       - drupaldb
+
+volumes:
+  drupal-data:
+  drupal-modules:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
